@@ -13,5 +13,5 @@ A lightweight PHP 7 + NGINX setup for work on small PHP projects.
 |-docker
 |--docker-compose.yml
 |-my-php-project
-|-- Tindex.php
+|--index.php
 </pre>
