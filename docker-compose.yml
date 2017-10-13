@@ -1,18 +1,39 @@
-version: '2'
+version:           '2'
 
 services:
 
     web:
-        image: nginx:latest
+        build: ./nginx
         ports:
-            - "8084:80"
+            - "80:80"
         volumes:
-            - ../phpinstajax:/app
+            - ../loginlogger:/app
             - ./site.conf:/etc/nginx/conf.d/default.conf
         links:
-            - php
+            - "php"
 
     php:
-        image: php:7-fpm
+        build: "./php"
         volumes:
-          - ../phpinstajax:/app
+          - ../loginlogger:/app
+        links:
+          - "mysql"
+
+    mysql:
+      image:  mysql:latest
+      environment:
+        - "MYSQL_ROOT_PASSWORD=mysqlrootpassword"
+        - "MYSQL_DATABASE=mysqldb"
+        - "MYSQL_USER=mysqluser"
+        - "MYSQL_PASSWORD=mysqlpassword"
+
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      environment:
+        - "MYSQL_USER=mysqluser"
+        - "MYSQL_PASSWORD=mysqlpassword"
+        - "MYSQL_ROOT_PASSWORD=mysqlrootpassword"
+      ports:
+        - "8080:80"
+      links:
+        - "mysql:db"
